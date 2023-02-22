@@ -1,0 +1,43 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:RomanNumbersCalculator.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="400"
+		Width="300" Height="400"
+        x:Class="RomanNumbersCalculator.Views.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="RomanNumbersCalculator">
+	<Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+	
+	<Window.Styles>
+		<StyleInclude Source="/Assets/CustomStyle.axaml"/>
+	</Window.Styles>
+	
+	<Grid ColumnDefinitions="0.25*, 0.25*, 0.25*, 0.25*" RowDefinitions="0.20*, 0.20*, 0.20*, 0.20*, 0.20*">	
+		
+		<TextBox Text="{Binding Equation}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4"></TextBox>
+
+		<Button Command="{Binding ClickButton}" CommandParameter="I" Classes="b1" Content="I" Name="ButtonOne" Grid.Row="1" Grid.Column="0"/>
+		<Button Command="{Binding ClickButton}" CommandParameter="C" Classes="b1" Content="C" Name="ButtonHandred" Grid.Row="1" Grid.Column="1"/>
+		<Button Command="{Binding ClickButton}" CommandParameter="+" Classes="b1" Content="+" Name="ButtonPlas" Grid.Row="1" Grid.Column="2"/>
+
+		<Button Command="{Binding ClickButton}" CommandParameter="V" Classes="b1" Content="V" Name="ButtonFive" Grid.Row="2" Grid.Column="0"/>
+		<Button Command="{Binding ClickButton}" CommandParameter="D" Classes="b1" Content="D" Name="ButtonFiveHundred" Grid.Row="2" Grid.Column="1"/>
+		<Button Command="{Binding ClickButton}" CommandParameter="-" Classes="b1" Content="-" Name="ButtonMinus" Grid.Row="2" Grid.Column="2"/>
+
+		<Button Command="{Binding ClickButton}" CommandParameter="X" Classes="b1" Content="X" Name="ButtonTen" Grid.Row="3" Grid.Column="0"/>
+		<Button Command="{Binding ClickButton}" CommandParameter="M" Classes="b1" Content="M" Name="ButtonThousand" Grid.Row="3" Grid.Column="1"/>
+		<Button Command="{Binding ClickButton}" CommandParameter="*" Classes="b1" Content="*" Name="ButtonMultiply" Grid.Row="3" Grid.Column="2"/>
+
+		<Button Command="{Binding ClickButton}" CommandParameter="L" Classes="b1" Content="L" Name="ButtonFifty" Grid.Row="4" Grid.Column="0"/>
+		<Button Command="{Binding ClickButton}" CommandParameter="CE" Classes="b1" Content="CE" Name="ButtonClin" Grid.Row="4" Grid.Column="1"/>
+		<Button Command="{Binding ClickButton}" CommandParameter="/" Classes="b1" Content="/" Name="ButtonDivide" Grid.Row="4" Grid.Column="2"/>
+
+		<Button Command="{Binding ClickButton}" CommandParameter="=" Classes="bEquals" Content="=" Name="ButtonEquals" Grid.Row="1" Grid.Column="4" Grid.RowSpan="4"/>
+
+	</Grid>
+
+</Window>
