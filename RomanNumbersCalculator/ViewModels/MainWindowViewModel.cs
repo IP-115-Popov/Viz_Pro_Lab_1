@@ -6,17 +6,15 @@ using System.ComponentModel;
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
-
 namespace RomanNumbersCalculator.ViewModels
 {
     public class MainWindowViewModel : INotifyPropertyChanged
     {
         private bool fladZapretMainos = false;
-        private int? pa = null;
-        private int? a = null;
+        private int? arabNumber = null;
 
-        Stack<int?> ch = new Stack<int?>();
-        Stack<string?> op = new Stack<string?>();
+        Stack<int?> numbersStack = new Stack<int?>();
+        Stack<string?> operationStack = new Stack<string?>();
 
 
         public string? equation;
@@ -30,57 +28,58 @@ namespace RomanNumbersCalculator.ViewModels
             }
         }
         public event PropertyChangedEventHandler? PropertyChanged;
-        private void f(int? ab)
+        private void numberToArabAndSave(int? enterNamder)
         {
-            if (pa != null)
+            if (arabNumber != null)
             {
-                if (pa < ab)
+                if (arabNumber < enterNamder)
                 {
                     if (fladZapretMainos) return;
                     fladZapretMainos = true;
-                    ab -= pa;
+                    enterNamder -= arabNumber;
                 }
                 else
                 {
-                    ab += pa;
+                    enterNamder += arabNumber;
                     fladZapretMainos = false;
                 }
             }
-            pa = ab;
+            arabNumber = enterNamder;
         }
-        private void f2(int? aF2, string? opF2)
+        private void pushOperToStack(string? opF2)
         {
-            ch.Push(aF2);
-            if (op.Count != 0 && ch.Count >= 2)
+            numbersStack.Push(arabNumber);
+            if (operationStack.Count != 0 && numbersStack.Count >= 2)
             {
-                if (op.Peek() == "*" || op.Peek() == "/" || op.Peek() == "+" || op.Peek() == "-")
+                if (operationStack.Peek() == "*" || operationStack.Peek() == "/" || operationStack.Peek() == "+" || operationStack.Peek() == "-")
                 {
-                    int? a1 = ch.Pop();
-                    int? a2 = ch.Pop();
-                    switch (op.Peek())
+                    int? a1 = numbersStack.Pop();
+                    int? a2 = numbersStack.Pop();
+                    int? rezF2;
+                    switch (operationStack.Peek())
                     {
                         case "+":
-                            aF2 = a1 + a2;
-                            ch.Push(aF2);
+                            rezF2 = a1 + a2;
+                            numbersStack.Push(rezF2);
                             break;
                         case "-":
-                            aF2 = a2 - a1;
-                            ch.Push(aF2);
+                            rezF2 = a2 - a1;
+                            numbersStack.Push(rezF2);
                             break;
                         case "*":
-                            aF2 = a1 * a2;
-                            ch.Push(aF2);
+                            rezF2 = a1 * a2;
+                            numbersStack.Push(rezF2);
                             break;
                         case "/":
-                            aF2 = a2 / a1;
-                            ch.Push(aF2);
+                            rezF2 = a2 / a1;
+                            numbersStack.Push(rezF2);
                             break;
                         default:
                             break;
                     }
                 }
             }
-            op.Push(opF2);
+            operationStack.Push(opF2);
         }
         private string? ConvertIntToRoman(int? ab)
         {
@@ -132,79 +131,67 @@ namespace RomanNumbersCalculator.ViewModels
             {
                 case "I":
                     Equation += argument;
-                    f(1);
+                    numberToArabAndSave(1);
                     break;
                 case "C":
                     Equation += argument;
-                    f(100);
+                    numberToArabAndSave(100);
                     break;
                 case "+":
                     Equation += argument;
-                    a = pa;
-                    pa = null;
-
-                    f2(a, "+");
+                    pushOperToStack("+");
+                    arabNumber = null;
                     break;
                 case "V":
                     Equation += argument;
-                    f(5);
+                    numberToArabAndSave(5);
                     break;
                 case "D":
                     Equation += argument;
-                    f(500);
+                    numberToArabAndSave(500);
                     break;
                 case "-":
                     Equation += argument;
-                    a = pa;
-                    pa = null;
-
-                    f2(a, "-");
+                    pushOperToStack("-");
+                    arabNumber = null;
                     break;
                 case "X":
                     Equation += argument;
-                    f(10);
+                    numberToArabAndSave(10);
                     break;
                 case "M":
                     Equation += argument;
-                    f(1000);
+                    numberToArabAndSave(1000);
                     break;
                 case "*":
                     Equation += argument;
-                    a = pa;
-                    pa = null;
-
-                    f2(a, "*");
+                    pushOperToStack("*");
+                    arabNumber = null;
                     break;
                 case "L":
                     Equation += argument;
-                    f(50);
+                    numberToArabAndSave(50);
                     break;
                 case "/":
                     Equation += argument;
-                    a = pa;
-                    pa = null;
-
-                    f2(a, "/");
+                    pushOperToStack("/");
+                    arabNumber = null;
                     break;
                 case "CE":
                     Equation = null;
-                    ch.Clear();
-                    op.Clear();
-                    a = null;
-                    pa = null;
+                    numbersStack.Clear();
+                    operationStack.Clear();
+                    arabNumber = null;
                     fladZapretMainos = false;
                     break;
                 case "=":
-                    a = pa;
-                    pa = null;
-                    f2(a, "/");
-                    f(50);
-                    Equation = ConvertIntToRoman(ch.Pop());
-                    //Equation = Convert.ToString(ch.Pop());
-                    ch.Clear();
-                    op.Clear();
-                    a = null;
-                    pa = null;
+                    pushOperToStack("/");
+                    arabNumber = null;
+                    numberToArabAndSave(50);
+                    Equation = ConvertIntToRoman(numbersStack.Pop());
+                    numbersStack.Clear();
+                    operationStack.Clear();
+                    arabNumber = null;
                     fladZapretMainos = false;
                     break;
                 default:
